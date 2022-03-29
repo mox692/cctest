@@ -109,7 +109,6 @@
             fprintf(stderr, "**Error** %s\n", messages[i]); \
         }                                                   \
         exit(1);                                            \
-    }                                                       \
     }
 #else
 #error macro CC_TEST_END is already defined.
