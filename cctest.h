@@ -38,7 +38,7 @@
         }                                                                       \
         else                                                                    \
         {                                                                       \
-            printf("-- TEST: %s ... err\n", case_name);                         \
+            fprintf(stderr, "-- TEST: %s ... err\n", case_name);                \
             CC_TEST_WRITE("%s: expected %d, got %d", case_name, expected, got); \
         }                                                                       \
     })
@@ -48,18 +48,19 @@
 
 // Show failed test name and detailed text.
 #ifndef CC_TEST_END
-#define CC_TEST_END                                \
-    if (pos == 0)                                  \
-    {                                              \
-        printf("==== All Test Passed ===\n");      \
-    }                                              \
-    else                                           \
-    {                                              \
-        for (int i = 0; i < pos; i++)              \
-        {                                          \
-            printf("**Error** %s\n", messages[i]); \
-        }                                          \
-    }                                              \
+#define CC_TEST_END                                         \
+    if (pos == 0)                                           \
+    {                                                       \
+        printf("==== All Test Passed ===\n");               \
+    }                                                       \
+    else                                                    \
+    {                                                       \
+        for (int i = 0; i < pos; i++)                       \
+        {                                                   \
+            fprintf(stderr, "**Error** %s\n", messages[i]); \
+        }                                                   \
+        exit(1);                                            \
+    }                                                       \
     }
 #else
 #error macro CC_TEST_END is already defined.
