@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_MSG_SIZE 1000
 #define MAX_MSG_CHAR_SIZE 100
@@ -17,12 +18,12 @@
 
 // build test result message and store it in messages[].
 #ifndef CC_TEST_WRITE
-#define CC_TEST_WRITE(message, case_name, a, b) ( \
-    {                                             \
-        char str[MAX_MSG_CHAR_SIZE];              \
-        sprintf(str, message, case_name, a, b);   \
-        messages[pos] = str;                      \
-        pos++;                                    \
+#define CC_TEST_WRITE(message, case_name, ...) (               \
+    {                                                          \
+        void *str = malloc(100);                               \
+        sprintf((char *)str, message, case_name, __VA_ARGS__); \
+        messages[pos] = str;                                   \
+        pos++;                                                 \
     })
 #else
 #error macro CC_TEST_WRITE is already defined.
@@ -71,7 +72,7 @@
 #ifndef ASSERT_STR
 #define ASSERT_STR(case_name, str, cmp) (                                                \
     {                                                                                    \
-        bool ok = 1;                                                                     \
+        int ok = 1;                                                                      \
         for (int offset = 0; *(str + offset) != '\0', *(cmp + offset) != '\0'; offset++) \
         {                                                                                \
             printf("%c, %c\n", *(str + offset), *(cmp + offset));                        \
@@ -111,7 +112,7 @@ inline bool eq(const T object1, const T object2)
         else                                                     \
         {                                                        \
             fprintf(stderr, "-- TEST: %s ... err\n", case_name); \
-            fprintf(stderr, "%s: failed.\n", case_name);         \
+            CC_TEST_WRITE("%s: failed.\n", case_name);           \
         }                                                        \
     })
 #endif
