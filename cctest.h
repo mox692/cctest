@@ -95,6 +95,27 @@
 #error macro ASSERT_STR is already defined.
 #endif
 
+#if defined(__cplusplus)
+template <class T>
+inline bool eq(const T object1, const T object2)
+{
+    return T::eq(object1, object2);
+}
+
+#define EQ(case_name, obj1, obj2) (                              \
+    {                                                            \
+        if (eq(obj1, obj2))                                      \
+        {                                                        \
+            printf("-- TEST: %s ... ok\n", case_name);           \
+        }                                                        \
+        else                                                     \
+        {                                                        \
+            fprintf(stderr, "-- TEST: %s ... err\n", case_name); \
+            fprintf(stderr, "%s: failed.\n", case_name);         \
+        }                                                        \
+    })
+#endif
+
 // Show failed test name and detailed text.
 #ifndef CC_TEST_END
 #define CC_TEST_END                                         \
@@ -109,6 +130,7 @@
             fprintf(stderr, "**Error** %s\n", messages[i]); \
         }                                                   \
         exit(1);                                            \
+    }                                                       \
     }
 #else
 #error macro CC_TEST_END is already defined.
