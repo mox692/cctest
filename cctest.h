@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_MSG_SIZE 1000
 #define MAX_MSG_CHAR_SIZE 100
@@ -29,7 +30,7 @@
 
 // Assertion an int type variable.
 // The first arg `case_name` expects a char pointer.
-#ifndef CC_TEST_ASSERT_INT
+#ifndef ASSERT_INT
 #define ASSERT_INT(case_name, expected, got) (                                  \
     {                                                                           \
         if (expected == got)                                                    \
@@ -43,7 +44,55 @@
         }                                                                       \
     })
 #else
-#error macro CC_TEST_ASSERT_INT is already defined.
+#error macro ASSERT_INT is already defined.
+#endif
+
+// Assert an char* type variable.
+// It uses memcmp internaly
+#ifndef ASSERT_NSTR
+#define ASSERT_NSTR(case_name, expected, got, size) (                           \
+    {                                                                           \
+        if (memcmp(expected, got, size) == 0)                                   \
+        {                                                                       \
+            printf("-- TEST: %s ... ok\n", case_name);                          \
+        }                                                                       \
+        else                                                                    \
+        {                                                                       \
+            fprintf(stderr, "-- TEST: %s ... err\n", case_name);                \
+            CC_TEST_WRITE("%s: expected %s, got %s", case_name, expected, got); \
+        }                                                                       \
+    })
+#else
+#error macro ASSERT_NSTR is already defined.
+#endif
+
+// Assert an char* type variable.
+// It uses memcmp internaly and read until EOF. (Use carefully)
+#ifndef ASSERT_STR
+#define ASSERT_STR(case_name, str, cmp) (                                                \
+    {                                                                                    \
+        bool ok = 1;                                                                     \
+        for (int offset = 0; *(str + offset) != '\0', *(cmp + offset) != '\0'; offset++) \
+        {                                                                                \
+            printf("%c, %c\n", *(str + offset), *(cmp + offset));                        \
+            if (*(str + offset) != *(cmp + offset))                                      \
+            {                                                                            \
+                ok = 0;                                                                  \
+                break;                                                                   \
+            }                                                                            \
+        }                                                                                \
+        if (ok)                                                                          \
+        {                                                                                \
+            printf("-- TEST: %s ... ok\n", case_name);                                   \
+        }                                                                                \
+        else                                                                             \
+        {                                                                                \
+            fprintf(stderr, "-- TEST: %s ... err\n", case_name);                         \
+            CC_TEST_WRITE("%s: expected %s, got %s", case_name, str, cmp);               \
+        }                                                                                \
+    })
+#else
+#error macro ASSERT_STR is already defined.
 #endif
 
 // Show failed test name and detailed text.
