@@ -18,12 +18,12 @@
 
 // build test result message and store it in messages[].
 #ifndef CC_TEST_WRITE
-#define CC_TEST_WRITE(message, case_name, ...) (               \
-    {                                                          \
-        void *str = malloc(100);                               \
-        sprintf((char *)str, message, case_name, __VA_ARGS__); \
-        messages[pos] = str;                                   \
-        pos++;                                                 \
+#define CC_TEST_WRITE(message, case_name, ...) (                     \
+    {                                                                \
+        char str[100];                                               \
+        sprintf(str, message, case_name __VA_OPT__(, ) __VA_ARGS__); \
+        messages[pos] = str;                                         \
+        pos++;                                                       \
     })
 #else
 #error macro CC_TEST_WRITE is already defined.
