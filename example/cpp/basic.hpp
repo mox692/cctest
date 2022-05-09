@@ -1,4 +1,5 @@
 #include <string.h>
+#include <iostream>
 
 class Person
 {
@@ -17,3 +18,9 @@ public:
 
 private:
 };
+inline std::ostream &operator<<(std::ostream &os, const Person &p)
+{
+    // print here
+    printf("age: %d", p.age);
+    return os;
+}
