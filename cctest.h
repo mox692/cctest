@@ -105,7 +105,7 @@
 template <class T>
 inline bool eq(const T object1, const T object2)
 {
-    return T::eq(object1, object2);
+    return object1 == object2;
 }
 
 #define EQ(case_name, obj1, obj2) (                               \

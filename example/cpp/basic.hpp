@@ -7,15 +7,6 @@ public:
     Person(int age) : age(age){};
     int age;
 
-    static bool eq(const Person p1, const Person p2)
-    {
-        if (p1.age != p2.age)
-        {
-            return false;
-        }
-        return true;
-    }
-
 private:
 };
 inline std::ostream &operator<<(std::ostream &os, const Person &p)
@@ -24,3 +15,4 @@ inline std::ostream &operator<<(std::ostream &os, const Person &p)
     printf("age: %d", p.age);
     return os;
 }
+inline bool operator==(const Person &lhs, const Person &rhs) { return lhs.age == rhs.age; }
