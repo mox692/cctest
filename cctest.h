@@ -74,7 +74,7 @@
 #ifndef ASSERT_STR
 #define ASSERT_STR(case_name, str, cmp) (                                                           \
     {                                                                                               \
-        bool ok = 1;                                                                                \
+        int ok = 1;                                                                                 \
         int offset = 0;                                                                             \
         for (char cur_char = *str; ok == 1, cur_char != '\0'; offset++, cur_char = *(str + offset)) \
         {                                                                                           \
